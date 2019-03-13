@@ -10,7 +10,7 @@ public class HomeBuilder {
         new SmartHomeJSONSerializer().writeSmartHome(smartHome);
     }
 
-    private static SmartHome generateSmartHome() {
+    public static SmartHome generateSmartHome() {
         Room kitchen = new Room(Arrays.asList(new Light("1", false), new Light("2", true)),
                 Arrays.asList(new Door(false, "1")),
                 "kitchen");

@@ -11,10 +11,10 @@ public class Application {
 
     private static void applicationLoop(SmartHome smartHome) {
         // начинаем цикл обработки событий
-        SensorEventListener sensorEventListener = new SensorEventGenerator();
+        SensorEventReceiver sensorEventReceiver = new SensorEventGenerator();
         SensorEvent event;
         SmartHomeEventHandler eventHandler = new StandardSmartHomeEventHandler(smartHome, new DummyCommandSender());
-        while ((event = sensorEventListener.getNextSensorEvent()) != null) {
+        while ((event = sensorEventReceiver.getNextSensorEvent()) != null) {
             eventHandler.handleEvent(event);
         }
     }
