@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-public class Light extends SmartHomeElement{
+public class Light extends SmartHomeSimple{
     private boolean isOn;
 
     public Light(String id, boolean isOn) {

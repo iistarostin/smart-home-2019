@@ -1,6 +1,6 @@
 package ru.sbt.mipt.oop;
 
-public class Door extends SmartHomeElement {
+public class Door extends SmartHomeSimple {
     private boolean isOpen;
 
     public Door(boolean isOpen, String id) {
@@ -10,5 +10,9 @@ public class Door extends SmartHomeElement {
 
     public void setOpen(boolean open) {
         isOpen = open;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
     }
 }
