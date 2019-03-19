@@ -1,10 +1,11 @@
 package ru.sbt.mipt.oop;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import  java.util.Iterator;
 
 public abstract class SmartHomeElement {
     private String id;
+    private SmartHomeElement parent;
 
     public SmartHomeElement(String id) {
         this.id = id;
@@ -13,24 +14,33 @@ public abstract class SmartHomeElement {
     public String getId() {
         return id;
     }
+
+    //getIterator method and its implementations are required to process composite calls in uniform manner
     public abstract Iterator<? extends SmartHomeElement> getIterator();
-    public abstract void apply(BiConsumer<SmartHomeElement, List<SmartHomeElement>> action, List<SmartHomeElement> parents);
-    public void applyComposite(String id, BiConsumer<SmartHomeElement, List<SmartHomeElement>> action, List<SmartHomeElement> parents) {
+
+    public abstract void apply(Consumer<SmartHomeElement> action);
+
+    //This is a template method!
+    public void applyComposite(String id, Consumer<SmartHomeElement> action) {
         Iterator<? extends SmartHomeElement> children = getIterator();
         if (this.id.equals(id)) {
-            apply(action, parents);
-            parents.add(this);
+            apply(action);
             while (children.hasNext()) {
-                children.next().apply(action, parents);
+                children.next().apply(action);
             }
-            parents.remove(parents.size() - 1);
         }
         else {
-            parents.add(this);
             while (children.hasNext()) {
-                children.next().applyComposite(id, action, parents);
+                children.next().applyComposite(id, action);
             }
-            parents.remove(parents.size() - 1);
         }
+    }
+
+    public SmartHomeElement getParent() {
+        return parent;
+    }
+
+    public void setParent(SmartHomeElement parent) {
+        this.parent = parent;
     }
 }

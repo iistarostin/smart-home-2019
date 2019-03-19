@@ -1,48 +1,39 @@
 package ru.sbt.mipt.oop;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static ru.sbt.mipt.oop.SensorEventType.DOOR_CLOSED;
 import static ru.sbt.mipt.oop.SensorEventType.DOOR_OPEN;
 
-public class StandardDoorEventProcessor extends SmartHomeEventProcessor {
+public class StandardDoorEventProcessor {
 
-    public StandardDoorEventProcessor(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome, sensorCommandSender);
+    SmartHome smartHome;
+    public StandardDoorEventProcessor(SmartHome smartHome) {
+        this.smartHome = smartHome;
     }
 
-    public void process(String elementID, SensorEventType eventType)
-    {
-        if (eventType == DOOR_OPEN) {
-            // событие от двери
-            openDoor(elementID);
-        }
-        if (eventType == DOOR_CLOSED) {
-            // событие от двери
-            closeDoor(elementID);
-        }
-    }
-    protected void openDoor(String elementID) {
-        smartHome.applyComposite(elementID, new BiConsumer<SmartHomeElement, List<SmartHomeElement>>() {
+    public void openDoor(String elementID) {
+        smartHome.applyComposite(elementID, new Consumer<SmartHomeElement>() {
             @Override
-            public void accept(SmartHomeElement current, List<SmartHomeElement> parents) {
+            public void accept(SmartHomeElement current) {
                 if (current instanceof Door) {
                     Door door = (Door) current;
-                    Room room = (Room) parents.get(parents.size() - 1);
+                    Room room = (Room) current.getParent();
                     door.setOpen(true);
                     System.out.println("Door " + door.getId() + " in room " + room.getName() + " was opened.");
                 }
             }
         });
     }
-    protected void closeDoor(String elementID) {
-        smartHome.applyComposite(elementID, new BiConsumer<SmartHomeElement, List<SmartHomeElement>>() {
+
+    public void closeDoor(String elementID) {
+        smartHome.applyComposite(elementID, new Consumer<SmartHomeElement>() {
             @Override
-            public void accept(SmartHomeElement current, List<SmartHomeElement> parents) {
+            public void accept(SmartHomeElement current) {
                 if (current instanceof Door) {
                     Door door = (Door) current;
-                    Room room = (Room) parents.get(parents.size() - 1);
+                    Room room = (Room) current.getParent();
                     door.setOpen(false);
                     System.out.println("Door " + door.getId() + " in room " + room.getName() + " was closed.");
                 }

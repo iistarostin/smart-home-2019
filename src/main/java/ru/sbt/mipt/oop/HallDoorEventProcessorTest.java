@@ -2,33 +2,30 @@ package ru.sbt.mipt.oop;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class LightEventProcessorTest {
+class HallDoorEventProcessorTest {
 
     @Test
-    void process() {
+    void closeDoor() {
         SmartHome sample = HomeBuilder.generateSmartHome();
-        LightEventProcessor lightProc = new LightEventProcessor(sample);
-        lightProc.turnLightOff("2");
+        HallDoorEventProcessor doorProc = new HallDoorEventProcessor(sample, new DummyCommandSender());
+        doorProc.openDoor("hall");
         sample.applyComposite(sample.getId(), new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
-                if (smartHomeElement.getParent().getId() == "kitchen" && smartHomeElement instanceof Light) {
-                    assert !((Light) smartHomeElement).isOn();
+                if (smartHomeElement.getParent().getId().equals("hall") && smartHomeElement instanceof Door) {
+                    assert ((Door)smartHomeElement).isOpen();
                 }
             }
         });
-
-        lightProc.turnLightOn(sample.getId());
+        doorProc.closeDoor("hall");
+        doorProc.openDoor(sample.getId());
         sample.applyComposite(sample.getId(), new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
                 if (smartHomeElement instanceof Light) {
-                    assert ((Light) smartHomeElement).isOn();
+                    assert !((Light) smartHomeElement).isOn();
                 }
             }
         });

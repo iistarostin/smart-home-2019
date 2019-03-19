@@ -13,7 +13,7 @@ public class Application {
         // начинаем цикл обработки событий
         SensorEventReceiver sensorEventReceiver = new SensorEventGenerator();
         SensorEvent event;
-        SmartHomeEventHandler eventHandler = new StandardSmartHomeEventHandler(smartHome, new DummyCommandSender());
+        SmartHomeEventHandler eventHandler = new GuardedSmartHomeEventHandler(smartHome, new DummyCommandSender());
         while ((event = sensorEventReceiver.getNextSensorEvent()) != null) {
             eventHandler.handleEvent(event);
         }

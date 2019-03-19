@@ -1,47 +1,37 @@
 package ru.sbt.mipt.oop;
 
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static ru.sbt.mipt.oop.SensorEventType.*;
 
-public class LightEventProcessor extends SmartHomeEventProcessor {
+public class LightEventProcessor {
 
-    public LightEventProcessor(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome, sensorCommandSender);
+    SmartHome smartHome;
+    public LightEventProcessor(SmartHome smartHome) {
+        this.smartHome = smartHome;
     }
 
-    public void process(String elementID, SensorEventType eventType)
-    {
-        if (eventType == LIGHT_ON) {
-            // событие от двери
-            turnLightOn(elementID);
-        }
-        if (eventType == LIGHT_OFF) {
-            // событие от двери
-            turnLightOff(elementID);
-        }
-    }
-    protected void turnLightOn(String elementID) {
-        smartHome.applyComposite(elementID, new BiConsumer<SmartHomeElement, List<SmartHomeElement>>() {
+    public void turnLightOn(String elementID) {
+        smartHome.applyComposite(elementID, new Consumer<SmartHomeElement>() {
             @Override
-            public void accept(SmartHomeElement current, List<SmartHomeElement> parents) {
+            public void accept(SmartHomeElement current) {
                 if (current instanceof Light) {
                     Light light = (Light) current;
-                    Room room = (Room) parents.get(parents.size() - 1);
+                    Room room = (Room) current.getParent();
                     light.setOn(true);
                     System.out.println("Light " + light.getId() + " in room " + room.getId() + " was turned on.");
                 }
             }
         });
     }
-    protected void turnLightOff(String elementID) {
-        smartHome.applyComposite(elementID, new BiConsumer<SmartHomeElement, List<SmartHomeElement>>() {
+    public void turnLightOff(String elementID) {
+        smartHome.applyComposite(elementID, new Consumer<SmartHomeElement>() {
             @Override
-            public void accept(SmartHomeElement current, List<SmartHomeElement> parents) {
+            public void accept(SmartHomeElement current) {
                 if (current instanceof Light) {
                     Light light = (Light) current;
-                    Room room = (Room) parents.get(parents.size() - 1);
+                    Room room = (Room) current.getParent();
                     light.setOn(false);
                     System.out.println("Light " + light.getId() + " in room " + room.getId() + " was turned off.");
                 }
