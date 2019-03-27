@@ -10,17 +10,17 @@ class HallDoorEventProcessorTest {
     void closeDoor() {
         SmartHome sample = HomeBuilder.generateSmartHome();
         HallDoorEventProcessor doorProc = new HallDoorEventProcessor(sample, new DummyCommandSender());
-        doorProc.openDoor("hall");
+        doorProc.handleEvent(new SensorEvent(SensorEventType.DOOR_OPEN, "hall"));
         sample.applyComposite(sample.getId(), new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
                 if (smartHomeElement.getParent().getId().equals("hall") && smartHomeElement instanceof Door) {
-                    assert ((Door)smartHomeElement).isOpen();
+                    assert (!((Door)smartHomeElement).isOpen());
                 }
             }
         });
-        doorProc.closeDoor("hall");
-        doorProc.openDoor(sample.getId());
+        new StandardDoorEventProcessor(sample).openDoor(sample.getId());
+        doorProc.handleEvent(new SensorEvent(SensorEventType.DOOR_CLOSED, sample.getId()));
         sample.applyComposite(sample.getId(), new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {

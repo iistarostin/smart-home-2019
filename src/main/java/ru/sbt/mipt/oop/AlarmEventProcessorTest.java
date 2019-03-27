@@ -16,14 +16,14 @@ class AlarmEventProcessorTest {
         sample.applyComposite("alarm", new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
-                assert ((Alarm)smartHomeElement).isActive();
+                assert ((Alarm)smartHomeElement).getState() == AlarmState.ACTIVE;
             }
         });
         alarmEventProcessor.deactivateAlarm("alarm", "123456");
         sample.applyComposite("alarm", new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
-                assert ((Alarm)smartHomeElement).isInactive();
+                assert ((Alarm)smartHomeElement).getState() == AlarmState.INACTIVE;
             }
         });
         alarmEventProcessor.activateAlarm("alarm", "654321");
@@ -31,7 +31,7 @@ class AlarmEventProcessorTest {
         sample.applyComposite("alarm", new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
-                assert ((Alarm)smartHomeElement).isRaised();
+                assert ((Alarm)smartHomeElement).getState() == AlarmState.RAISED;
             }
         });
     }

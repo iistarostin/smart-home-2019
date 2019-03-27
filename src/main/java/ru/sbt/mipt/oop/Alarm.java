@@ -6,14 +6,14 @@ public class Alarm extends SmartHomeSimple {
 
     public Alarm(String id) {
         super(id);
-        alarmState = new AlarmBase();
+        alarmState = new AlarmBaseInactive();
     }
 
     public void activate(String code) {
         alarmState = alarmState.activate(code);
     }
 
-    public void deactivate(String code) throws InvalidCodeException{
+    public void deactivate(String code) {
         alarmState = alarmState.deactivate(code);
     }
 
@@ -21,13 +21,5 @@ public class Alarm extends SmartHomeSimple {
         alarmState = alarmState.raise();
     }
 
-    public boolean isActive() {
-        return alarmState.isActive();
-    }
-    public boolean isInactive() {
-        return alarmState.isInactive();
-    }
-    public boolean isRaised() {
-        return alarmState.isRaised();
-    }
+    public AlarmState getState() { return alarmState.getState(); }
 }

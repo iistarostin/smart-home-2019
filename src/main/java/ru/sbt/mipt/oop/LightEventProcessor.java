@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 import static ru.sbt.mipt.oop.SensorEventType.*;
 
-public class LightEventProcessor {
+public class LightEventProcessor  implements SmartHomeEventHandler{
 
     SmartHome smartHome;
     public LightEventProcessor(SmartHome smartHome) {
@@ -37,5 +37,20 @@ public class LightEventProcessor {
                 }
             }
         });
+    }
+
+    @Override
+    public void handleEvent(SensorEvent event) {
+        SensorEventType eventType = event.getType();
+        String elementID = event.getObjectId();
+        if (eventType == LIGHT_ON || eventType == LIGHT_OFF) {
+            if (eventType == LIGHT_ON) {
+                turnLightOn(elementID);
+            }
+            if (eventType == LIGHT_OFF) {
+
+                turnLightOff(elementID);
+            }
+        }
     }
 }

@@ -3,7 +3,10 @@ package ru.sbt.mipt.oop;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class AlarmEventProcessor {
+import static ru.sbt.mipt.oop.SensorEventType.ALARM_ACTIVATE;
+import static ru.sbt.mipt.oop.SensorEventType.ALARM_DEACTIVATE;
+
+public class AlarmEventProcessor implements SmartHomeEventHandler {
     SmartHome smartHome;
     public  AlarmEventProcessor(SmartHome smartHome) {
         this.smartHome = smartHome;
@@ -22,25 +25,22 @@ public class AlarmEventProcessor {
         });
     }
 
-    public boolean deactivateAlarm(String elementID, String code) {
-        AtomicBoolean wrongCode = new AtomicBoolean(false);
+    public void deactivateAlarm(String elementID, String code) {
         smartHome.applyComposite(elementID, new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement current) {
                 if (current instanceof Alarm) {
                     Alarm alarm = (Alarm) current;
-                    try {
-                        alarm.deactivate(code);
+                    alarm.deactivate(code);
+                    if (alarm.getState() == AlarmState.INACTIVE) {
                         System.out.println("Alarm deactivated with code " + code);
                     }
-                    catch (InvalidCodeException e) {
-                        wrongCode.set(true);
+                    else {
                         System.out.println("Failed to deactivate, invalid code");
                     }
                 }
             }
         });
-        return wrongCode.get();
     }
 
     public void raiseAlarm(String elementID) {
@@ -54,5 +54,20 @@ public class AlarmEventProcessor {
                 }
             }
         });
+    }
+
+    @Override
+    public void handleEvent(SensorEvent event) {
+        SensorEventType eventType = event.getType();
+        String elementID = event.getObjectId();
+        if (eventType == ALARM_ACTIVATE || eventType == ALARM_DEACTIVATE) {
+            String code = (String)event.getParameter();
+            if (eventType == ALARM_ACTIVATE) {
+                activateAlarm(elementID, code);
+            }
+            if (eventType == ALARM_DEACTIVATE) {
+                deactivateAlarm(elementID, code);
+            }
+        }
     }
 }
