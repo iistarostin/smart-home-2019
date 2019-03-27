@@ -23,7 +23,8 @@ public class HomeBuilder {
         Room hall = new Room(Arrays.asList(new Light("7", false), new Light("8", false), new Light("9", false)),
                 Arrays.asList(new Door(false, "4")),
                 "hall");
-        return new SmartHome(Arrays.asList(kitchen, bathroom, bedroom, hall));
+        Alarm alarm = new Alarm("alarm");
+        return new SmartHome(Arrays.asList(kitchen, bathroom, bedroom, hall), alarm);
     }
 
 }

@@ -2,7 +2,7 @@ package ru.sbt.mipt.oop;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class SmartHomeComposite extends SmartHomeElement {
     public SmartHomeComposite(String id) {
@@ -10,7 +10,7 @@ public abstract class SmartHomeComposite extends SmartHomeElement {
     }
 
     @Override
-    public void apply(BiConsumer<SmartHomeElement, List<SmartHomeElement>> action, List<SmartHomeElement> parents) {
+    public void apply(Consumer<SmartHomeElement> action) {
         return;
     }
 }
