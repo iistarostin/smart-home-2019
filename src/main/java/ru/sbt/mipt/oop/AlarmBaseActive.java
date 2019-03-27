@@ -1,6 +1,7 @@
 package ru.sbt.mipt.oop;
 
 public class AlarmBaseActive extends AlarmBase {
+
     public AlarmBaseActive(String code) {
         super(code);
     }
@@ -16,7 +17,7 @@ public class AlarmBaseActive extends AlarmBase {
             return new AlarmBaseInactive();
         }
         else {
-            return new AlarmBaseRaised(code);
+            return new AlarmBaseRaised(this.code);
         }
     }
 }

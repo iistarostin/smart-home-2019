@@ -2,13 +2,16 @@ package ru.sbt.mipt.oop;
 
 public abstract class AlarmBase {
 
-    private String code;
+    protected String code;
 
     public AlarmBase(String code) {
         this.code = code;
     }
 
     protected boolean codeOK(String code) {
+        if (code == null) {
+            return true;
+        }
         return code.equals(this.code);
     }
 
@@ -19,7 +22,8 @@ public abstract class AlarmBase {
         return this;
     }
     public AlarmBase raise() {
-        return this;
+        return new AlarmBaseRaised(this.code);
     }
+
     public abstract AlarmState getState();
 }

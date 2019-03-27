@@ -12,11 +12,7 @@ public class Alarm extends SmartHomeSimple {
     public void activate(String code) {
         alarmState = alarmState.activate(code);
     }
-
-    public void deactivate(String code) {
-        alarmState = alarmState.deactivate(code);
-    }
-
+    public void deactivate(String code) { alarmState = alarmState.deactivate(code); }
     public void raise() {
         alarmState = alarmState.raise();
     }

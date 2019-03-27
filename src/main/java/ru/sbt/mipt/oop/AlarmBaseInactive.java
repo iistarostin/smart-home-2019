@@ -2,9 +2,8 @@ package ru.sbt.mipt.oop;
 
 public class AlarmBaseInactive extends AlarmBase {
 
-    public AlarmBaseInactive() {
-        super(null);
-    }
+    public AlarmBaseInactive() { super(null); }
+
     @Override
     public AlarmState getState() {
         return AlarmState.INACTIVE;

@@ -12,6 +12,7 @@ public class AlarmBaseRaised extends AlarmBase {
         }
         return this;
     }
+
     @Override
     public AlarmState getState() {
         return AlarmState.RAISED;
