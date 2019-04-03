@@ -13,6 +13,7 @@ public class ProgrammableRemoteControl implements RemoteControl {
     }
 
     public ProgrammableRemoteControl() {
+        this.binds = new HashMap<>();
         this.id = ""; //default id
     }
 

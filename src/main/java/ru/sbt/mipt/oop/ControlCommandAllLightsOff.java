@@ -15,7 +15,7 @@ public class ControlCommandAllLightsOff extends ControlCommand {
             public void accept(SmartHomeElement smartHomeElement) {
                 if (smartHomeElement instanceof Light) {
                     ((Light) smartHomeElement).setOn(false);
-                    SensorCommand command = new SensorCommand(CommandType.LIGHT_OFF, smartHomeElement.getId());
+                    SensorCommand command = new SensorCommand(SensorCommandType.LIGHT_OFF, smartHomeElement.getId());
                     sensorCommandSender.sendCommand(command);
                 }
             }

@@ -1,7 +1,5 @@
 package ru.sbt.mipt.oop;
 
-import java.util.function.Consumer;
-
 public class ControlCommandAlarmRaise extends ControlCommand {
 
     public ControlCommandAlarmRaise(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
@@ -11,6 +9,7 @@ public class ControlCommandAlarmRaise extends ControlCommand {
     @Override
     void execute() {
         smartHome.getAlarm().raise();
-        SensorCommand command = new SensorCommand(CommandType.ALARM_RAISE, smartHome.getAlarm().getId());
+        SensorCommand command = new SensorCommand(SensorCommandType.ALARM_RAISE, smartHome.getAlarm().getId());
+        sensorCommandSender.sendCommand(command);
     }
 }

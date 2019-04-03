@@ -10,12 +10,12 @@ public class ControlCommandCorridorLightOn extends ControlCommand {
 
     @Override
     void execute() {
-        smartHome.applyComposite("corridor", new Consumer<SmartHomeElement>() {
+        smartHome.applyComposite("hall", new Consumer<SmartHomeElement>() { //assuming hall and corridor are the same room
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
                 if (smartHomeElement instanceof Light) {
                     ((Light) smartHomeElement).setOn(true);
-                    SensorCommand command = new SensorCommand(CommandType.LIGHT_ON, smartHomeElement.getId());
+                    SensorCommand command = new SensorCommand(SensorCommandType.LIGHT_ON, smartHomeElement.getId());
                     sensorCommandSender.sendCommand(command);
                 }
             }

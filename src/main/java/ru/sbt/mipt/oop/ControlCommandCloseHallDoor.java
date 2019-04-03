@@ -15,7 +15,7 @@ public class ControlCommandCloseHallDoor extends ControlCommand {
             public void accept(SmartHomeElement smartHomeElement) {
                 if (smartHomeElement instanceof Door) {
                     ((Door) smartHomeElement).setOpen(false);
-                    SensorCommand command = new SensorCommand(CommandType.DOOR_CLOSE, smartHomeElement.getId());
+                    SensorCommand command = new SensorCommand(SensorCommandType.DOOR_CLOSE, smartHomeElement.getId());
                     sensorCommandSender.sendCommand(command);
                 }
             }
