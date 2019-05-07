@@ -4,21 +4,18 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public class HallDoorEventProcessor extends StandardDoorEventProcessor{
+import static ru.sbt.mipt.oop.SensorEventType.DOOR_CLOSED;
 
+public class HallDoorEventProcessor implements SmartHomeEventHandler{
+
+    private SmartHome smartHome;
     private SensorCommandSender sensorCommandSender;
     public HallDoorEventProcessor(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome);
+        this.smartHome = smartHome;
         this.sensorCommandSender = sensorCommandSender;
     }
 
-    @Override
-    public void closeDoor(String elementID) {
-        super.closeDoor(elementID);
-        turnAllLightsOff(smartHome, sensorCommandSender);
-    }
-
-    private void turnAllLightsOff(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
+    private void turnAllLightsOff() {
         smartHome.applyComposite(smartHome.getId(), new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {
@@ -29,5 +26,14 @@ public class HallDoorEventProcessor extends StandardDoorEventProcessor{
                 }
             }
         });
+    }
+
+    @Override
+    public void handleEvent(SensorEvent event) {
+        SensorEventType eventType = event.getType();
+        String elementID = event.getObjectId();
+        if (eventType == DOOR_CLOSED && elementID == "hall") {
+            turnAllLightsOff();
+        }
     }
 }

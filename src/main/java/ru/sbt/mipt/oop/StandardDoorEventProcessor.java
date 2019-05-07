@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import static ru.sbt.mipt.oop.SensorEventType.DOOR_CLOSED;
 import static ru.sbt.mipt.oop.SensorEventType.DOOR_OPEN;
 
-public class StandardDoorEventProcessor {
+public class StandardDoorEventProcessor implements SmartHomeEventHandler {
 
     SmartHome smartHome;
     public StandardDoorEventProcessor(SmartHome smartHome) {
@@ -39,5 +39,20 @@ public class StandardDoorEventProcessor {
                 }
             }
         });
+    }
+
+    @Override
+    public void handleEvent(SensorEvent event) {
+        SensorEventType eventType = event.getType();
+        String elementID = event.getObjectId();
+
+        if (eventType == DOOR_CLOSED || eventType == DOOR_OPEN) {
+            if (eventType == DOOR_OPEN) {
+                openDoor(elementID);
+            }
+            if (eventType == DOOR_CLOSED) {
+                closeDoor(elementID);
+            }
+        }
     }
 }

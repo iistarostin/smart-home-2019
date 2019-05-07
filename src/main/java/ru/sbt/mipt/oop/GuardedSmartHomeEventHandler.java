@@ -2,19 +2,19 @@ package ru.sbt.mipt.oop;
 
 public class GuardedSmartHomeEventHandler extends SmartHomeEventHandlerDecorator {
     SmartHome smartHome;
-    public GuardedSmartHomeEventHandler(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome, sensorCommandSender);
+    public GuardedSmartHomeEventHandler(SmartHomeEventHandler base, SmartHome smartHome) {
+        super(base);
         this.smartHome = smartHome;
     }
 
     @Override
     public void handleEvent(SensorEvent event) {
-        if (smartHome.getAlarm().isRaised()) {
+        if (smartHome.getAlarm().getState() == AlarmState.RAISED) {
             System.out.println("Sending sms");
         }
-        else if (smartHome.getAlarm().isActive()) {
+        else if (smartHome.getAlarm().getState() == AlarmState.ACTIVE) {
             if (event.getType() != SensorEventType.ALARM_DEACTIVATE) {
-                new AlarmEventProcessor(smartHome).raiseAlarm(smartHome.getAlarm().getId());
+                smartHome.getAlarm().raise();
                 System.out.println("Sending sms");
             }
         } else {
