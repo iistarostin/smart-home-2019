@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import com.coolcompany.smarthome.events.SensorEventsManager;
+import rc.RemoteControl;
 
 public class Application {
 
@@ -16,19 +17,38 @@ public class Application {
 
     private static void runStandardEventManager(SmartHome smartHome) {
         // начинаем цикл обработки событий
-        SensorEventReceiver sensorEventReceiver = new SensorEventGenerator();
-        SmartHomeEventManager smartHomeEventManager = new SmartHomeEventManager(sensorEventReceiver);
-        List<SmartHomeEventHandler> handlers = createHandlers(smartHome, new DummyCommandSender());
+        SensorCommandSender sensorCommandSender = new DummyCommandSender();
+
+        SmartHomeEventManager smartHomeEventManager = new SmartHomeEventManager(new SensorEventGenerator());
+        List<SmartHomeEventHandler> handlers = createHandlers(smartHome, sensorCommandSender);
         registerHandlers(handlers, smartHomeEventManager);
+
+        //Initialize and program remote control
+        ProgrammableRemoteControl remoteControl = new ProgrammableRemoteControl();
+        programRC(remoteControl, smartHome, sensorCommandSender);
+
         smartHomeEventManager.start();
     }
 
     private static void runCCEventManager(SmartHome smartHome) {
         // начинаем цикл обработки событий
+        SensorCommandSender sensorCommandSender = new DummyCommandSender();
+
         SensorEventsManager sensorEventsManager = new SensorEventsManager();
-        List<SmartHomeEventHandler> handlers = createHandlers(smartHome, new DummyCommandSender());
+        List<SmartHomeEventHandler> handlers = createHandlers(smartHome, sensorCommandSender);
         registerHandlers(handlers, sensorEventsManager);
+
+        ProgrammableRemoteControl remoteControl = new ProgrammableRemoteControl();
+        programRC(remoteControl, smartHome, sensorCommandSender);
+
         sensorEventsManager.start();
+    }
+
+    private static void programRC(ProgrammableRemoteControl remoteControl, SmartHome smartHome, SensorCommandSender sensorCommandSender) {
+        remoteControl.bind("A", new ControlCommandAlarmRaise(smartHome.getAlarm(), sensorCommandSender));
+        remoteControl.bind("B", new ControlCommandAlarmActivate(smartHome.getAlarm(), sensorCommandSender, ""));
+        remoteControl.bind("3", new ControlCommandAllLightsOff(smartHome, sensorCommandSender));
+        remoteControl.bind("4", new ControlCommandCorridorLightOn(smartHome, sensorCommandSender));
     }
 
     private static List<SmartHomeEventHandler> createHandlers(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
