@@ -2,14 +2,17 @@ package ru.sbt.mipt.oop;
 
 import java.util.function.Consumer;
 
-public class ControlCommandCloseHallDoor extends ControlCommand {
+public class ControlCommandCloseHallDoor implements ControlCommand {
+    SmartHome smartHome;
+    SensorCommandSender sensorCommandSender;
 
     public ControlCommandCloseHallDoor(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome, sensorCommandSender);
+        this.smartHome = smartHome;
+        this.sensorCommandSender = sensorCommandSender;
     }
 
     @Override
-    void execute() {
+    public void execute() {
         smartHome.applyComposite("hall", new Consumer<SmartHomeElement>() {
             @Override
             public void accept(SmartHomeElement smartHomeElement) {

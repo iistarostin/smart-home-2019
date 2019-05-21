@@ -13,21 +13,21 @@ class ProgrammableRemoteControlTest {
     void onButtonPressed() {
         RemoteControl testRC = new ProgrammableRemoteControl();
         int[] state = new int[1];
-        ((ProgrammableRemoteControl) testRC).bind("inc", new ControlCommand(null, null) {
+        ((ProgrammableRemoteControl) testRC).bind("inc", new ControlCommand() {
             @Override
-            void execute() {
+            public void execute() {
                 state[0] += 1;
             }
         });
-        ((ProgrammableRemoteControl) testRC).bind("dec", new ControlCommand(null, null) {
+        ((ProgrammableRemoteControl) testRC).bind("dec", new ControlCommand() {
             @Override
-            void execute() {
+            public void execute() {
                 state[0] -= 1;
             }
         });
-        ((ProgrammableRemoteControl) testRC).bind("add5", new ControlCommand(null, null) {
+        ((ProgrammableRemoteControl) testRC).bind("add5", new ControlCommand() {
             @Override
-            void execute() {
+            public void execute() {
                 state[0] += 5;
             }
         });
@@ -37,9 +37,9 @@ class ProgrammableRemoteControlTest {
         assert (state[0] == 5);
 
         //rebind
-        ((ProgrammableRemoteControl) testRC).bind("inc", new ControlCommand(null, null) {
+        ((ProgrammableRemoteControl) testRC).bind("inc", new ControlCommand() {
             @Override
-            void execute() {
+            public void execute() {
                 state[0] += 2;
             }
         });

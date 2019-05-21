@@ -1,15 +1,23 @@
 package ru.sbt.mipt.oop;
 
-public class ControlCommandAlarmRaise extends ControlCommand {
+public class ControlCommandAlarmRaise implements ControlCommand {
+    Alarm alarm;
+    SensorCommandSender sensorCommandSender;
 
     public ControlCommandAlarmRaise(SmartHome smartHome, SensorCommandSender sensorCommandSender) {
-        super(smartHome, sensorCommandSender);
+        this.alarm = smartHome.getAlarm();
+        this.sensorCommandSender = sensorCommandSender;
+    }
+
+    public ControlCommandAlarmRaise(Alarm alarm, SensorCommandSender sensorCommandSender) {
+        this.alarm = alarm;
+        this.sensorCommandSender = sensorCommandSender;
     }
 
     @Override
-    void execute() {
-        smartHome.getAlarm().raise();
-        SensorCommand command = new SensorCommand(SensorCommandType.ALARM_RAISE, smartHome.getAlarm().getId());
+    public void execute() {
+        alarm.raise();
+        SensorCommand command = new SensorCommand(SensorCommandType.ALARM_RAISE, alarm.getId());
         sensorCommandSender.sendCommand(command);
     }
 }
