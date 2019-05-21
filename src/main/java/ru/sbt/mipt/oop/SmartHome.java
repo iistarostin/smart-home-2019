@@ -1,5 +1,7 @@
 package ru.sbt.mipt.oop;
 
+import org.springframework.context.annotation.Bean;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
